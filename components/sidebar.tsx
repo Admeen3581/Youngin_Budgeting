@@ -55,7 +55,7 @@ const Sidebar = ({user}: SiderbarProps) => {
 
                 USER INFO
          </nav>
-         USER
+         USER FOOTER
     </section>
   )
 }
