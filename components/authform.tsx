@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import SignFormTemplate from './signform';
 
 const passwordPattern = /^(?=.*[0-9])(?=.*[!@#$%^&*])/;
 const formSchema = z.object({
@@ -102,49 +103,19 @@ function onSubmit(values: z.infer<typeof formSchema>)
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     {/*Username/Email */}
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <div className='form-item'>
-                            <FormLabel className='form-label'>
-                                Email
-                            </FormLabel>
-                            <div className='flex w-full flex-col'>
-                                <FormControl>
-                                    <Input
-                                        placeholder='Enter your email'
-                                        className='input-class'
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage className='form-message mt-2'></FormMessage>
-                            </div>
-                        </div>
-                      )}
+                    <SignFormTemplate
+                        form={form}
+                        name={"email"}
+                        label={"Email"}
+                        placeholder={"Enter your email"}
                     />
                     {/*Password */}
-                    <FormField
-                      control={form.control}
-                      name="password"
-                      render={({ field }) => (
-                        <div className='form-item'>
-                            <FormLabel className='form-label'>
-                                Password
-                            </FormLabel>
-                            <div className='flex w-full flex-col'>
-                                <FormControl>
-                                    <Input
-                                        placeholder='Enter your password'
-                                        className='input-class'
-                                        type='password'
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage className='form-message mt-2'></FormMessage>
-                            </div>
-                        </div>
-                      )}
+                    <SignFormTemplate
+                        form={form}
+                        name={'password'}
+                        label={'Password'}
+                        placeholder={'Enter your password'}
+                        type='password'
                     />
                     <Button type="submit">Submit</Button>
                   </form>
