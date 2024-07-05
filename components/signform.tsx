@@ -9,9 +9,21 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { LayoutProps } from '@/.next/types/app/layout'
+import { UseFormReturn } from 'react-hook-form';
 
 
-const SignFormTemplate = ({form, name, label, placeholder, type=''}) => {
+interface SignFormInter
+{
+    form: UseFormReturn<any>;
+    name: string;
+    label: string;
+    placeholder: string;
+    type?: string;
+}
+
+
+const SignFormTemplate = ({form, name, label, placeholder, type=''}: SignFormInter) => {
   return (
     <FormField
         control={form.control}
