@@ -19,7 +19,8 @@ import {
 import {Input} from "@/components/ui/input"
 import SignFormTemplate from './signform';
 import {Loader2} from 'lucide-react';
-import { formSchema } from '@/lib/utils';
+import { authFormSchema } from '@/lib/utils';
+const formSchema = authFormSchema();
 
 const AuthForm = ({type}: {type : string}) => 
 {

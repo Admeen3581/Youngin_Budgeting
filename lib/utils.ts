@@ -196,9 +196,9 @@ export const getTransactionStatus = (date: Date) => {
 };
 
 const passwordPattern = /^(?=.*[0-9])(?=.*[!@#$%^&*])/;
-const numbers = /^[0-9]*$/;
+const numbers = /^[0-9]$/;
 const alphaNumeric = /^(?=.*[a-z])|(?=.*[ABCDEFGHIJKLMNOPQRSTUVWXYZ])/;
-export const formSchema = z.object({
+export const authFformSchema = (type: string) => z.object({
   email: z.string().email( 
     {
       message: "Not a valid email"
@@ -213,18 +213,18 @@ export const formSchema = z.object({
       message: "Password must include at least 1 number & special character"
     }
   ),
-  firstName: z.string().regex(alphaNumeric,
+  firstName: type === 'sign-in' ? z.string().optional() : z.string().regex(alphaNumeric,
     {
       message: "Names can only have letters my guy"
     }
   ),
-  lastName: z.string().regex(alphaNumeric,
+  lastName: type === 'sign-in' ? z.string().optional() : z.string().regex(alphaNumeric,
     {
       message: "Names can only have letters my guy"
     }
   ),
-  address: z.string(),
-  state: z.string().length(2,
+  address: type === 'sign-in' ? z.string().optional() : z.string(),
+  state: type === 'sign-in' ? z.string().optional() : z.string().length(2,
     {
       message: "Use your state's abbreviation"
     }
@@ -233,7 +233,7 @@ export const formSchema = z.object({
       message: "Use your state's abbreviation"
     }
   ),
-  code: z.string().length(5,
+  code: type === 'sign-in' ? z.string().optional() : z.string().length(5,
     {
       message: "Enter a valid zip code"
     }
@@ -242,13 +242,13 @@ export const formSchema = z.object({
       message: "Enter a valid zip code"
     }
   ),
-  country: z.string(),
+  country: type === 'sign-in' ? z.string().optional() : z.string(),
   /*birthday: z.date(
     {
       message: "Enter a valid date"
     }
   )*/
-  birthday: z.string()
+  birthday: type === 'sign-in' ? z.string().optional() : z.string()
   
 
 })

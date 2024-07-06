@@ -10,10 +10,10 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { FieldPath, UseFormReturn } from 'react-hook-form';
-import { formSchema } from '@/lib/utils';
+import { authFormSchema } from '@/lib/utils';
 import { z } from 'zod';
 
-
+const formSchema = authFormSchema('sign-up');
 interface SignFormInter
 {
     form: UseFormReturn<z.infer<typeof formSchema>>;
