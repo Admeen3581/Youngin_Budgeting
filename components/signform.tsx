@@ -9,14 +9,15 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { LayoutProps } from '@/.next/types/app/layout'
-import { UseFormReturn } from 'react-hook-form';
+import { FieldPath, UseFormReturn } from 'react-hook-form';
+import { formSchema } from '@/lib/utils';
+import { z } from 'zod';
 
 
 interface SignFormInter
 {
-    form: UseFormReturn<any>;
-    name: string;
+    form: UseFormReturn<z.infer<typeof formSchema>>;
+    name: FieldPath<z.infer<typeof formSchema>>;
     label: string;
     placeholder: string;
     type?: string;

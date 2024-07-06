@@ -2,6 +2,7 @@
 import { type ClassValue, clsx } from "clsx";
 import qs from "query-string";
 import { twMerge } from "tailwind-merge";
+import { z } from "zod";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -193,3 +194,61 @@ export const getTransactionStatus = (date: Date) => {
 
   return date > twoDaysAgo ? "Processing" : "Success";
 };
+
+const passwordPattern = /^(?=.*[0-9])(?=.*[!@#$%^&*])/;
+const numbers = /^[0-9]*$/;
+const alphaNumeric = /^(?=.*[a-z])|(?=.*[ABCDEFGHIJKLMNOPQRSTUVWXYZ])/;
+export const formSchema = z.object({
+  email: z.string().email( 
+    {
+      message: "Not a valid email"
+    }
+  ),
+  password: z.string().min(10,
+    {
+      message: "Password must be longer than 10 characters"
+    }
+  ).regex(passwordPattern,
+    {
+      message: "Password must include at least 1 number & special character"
+    }
+  ),
+  firstName: z.string().regex(alphaNumeric,
+    {
+      message: "Names can only have letters my guy"
+    }
+  ),
+  lastName: z.string().regex(alphaNumeric,
+    {
+      message: "Names can only have letters my guy"
+    }
+  ),
+  address: z.string(),
+  state: z.string().length(2,
+    {
+      message: "Use your state's abbreviation"
+    }
+  ).regex(alphaNumeric,
+    {
+      message: "Use your state's abbreviation"
+    }
+  ),
+  code: z.string().length(5,
+    {
+      message: "Enter a valid zip code"
+    }
+  ).regex(numbers, 
+    {
+      message: "Enter a valid zip code"
+    }
+  ),
+  country: z.string(),
+  /*birthday: z.date(
+    {
+      message: "Enter a valid date"
+    }
+  )*/
+  birthday: z.string()
+  
+
+})

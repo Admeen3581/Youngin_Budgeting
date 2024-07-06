@@ -3,10 +3,10 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import React, { useState } from 'react'
-import { z } from "zod" /*This is a reminder that all form events must be client side */
-import { zodResolver } from "@hookform/resolvers/zod"
-import {useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
+import {z} from "zod" /*This is a reminder that all form events must be client side */
+import {zodResolver} from "@hookform/resolvers/zod"
+import {useForm} from "react-hook-form"
+import {Button} from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -16,51 +16,37 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+import {Input} from "@/components/ui/input"
 import SignFormTemplate from './signform';
+import {Loader2} from 'lucide-react';
+import { formSchema } from '@/lib/utils';
 
-const passwordPattern = /^(?=.*[0-9])(?=.*[!@#$%^&*])/;
-const formSchema = z.object({
-  email: z.string().email( 
-    {
-        message: "Not a valid email"
-    }
-  ),
-  password: z.string().min(10,
-    {
-        message: "Password must be longer than 10 characters"
-    }
-  ).regex(passwordPattern,
-    {
-        message: "Password must include at least 1 number & special character"
-    }
-  )
-})
-
-
-const AuthForm = ({type}: {type : string}) => {
-
-    // 1. Define your form.
-    const form = useForm<z.infer<typeof formSchema>>({
+const AuthForm = ({type}: {type : string}) => 
+{
+  //Form Definiton
+  const form = useForm<z.infer<typeof formSchema>>(
+  {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
-      password: ""
+      password: "",
     },
-})
- 
-  // 2. Define a submit handler.
-function onSubmit(values: z.infer<typeof formSchema>)
-{
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
-}
+  })
 
-    const [user, setUser] = useState(null); /*I have no idea what this does? */
+  const [user, setUser] = useState(null); /*I have no idea what this does? */
+  const [isLoading, setIsLoading] = useState(false); 
+  /*Sets initial loading state to false. If any action could cause a load, switch the bool val. */
+ 
+  // Submission handler
+  function onSubmit(values: z.infer<typeof formSchema>)
+  {
+      setIsLoading(true);
+      console.log(values)
+      setIsLoading(false);
+  }
     
   return (
-        <section className='auth-form'>
+      <section className='auth-form'>
         <header className='flex flex-col gap-5 md:gap-8'>
             <Link href="/" className='cursor-pointer items-center gap-1 flex'>
                     <Image
@@ -102,23 +88,107 @@ function onSubmit(values: z.infer<typeof formSchema>)
             <div>
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+
+                    {type === 'sign-up' && 
+                    (
+                      <div className='flex flex-col gap-3'>
+                        {/*First name */}
+                        <SignFormTemplate
+                          form={form}
+                          name='firstName'
+                          label='First Name'
+                          placeholder='ex. Jack'
+                        />
+
+                        {/*Last name */}
+                        <SignFormTemplate
+                          form={form}
+                          name='lastName'
+                          label='Last Name'
+                          placeholder='ex. Hoff'
+                        />
+
+                        {/*Address */}
+                        <SignFormTemplate
+                          form={form}
+                          name='address'
+                          label='Home Address'
+                          placeholder='ex. 123 Apple Ave.'
+                        />
+
+                        {/*State*/}
+                        <SignFormTemplate
+                          form={form}
+                          name='state'
+                          label='State'
+                          placeholder='ex. TX'
+                        />
+
+                        {/*Postal Code*/}
+                        <SignFormTemplate
+                          form={form}
+                          name='code'
+                          label='Postal Code'
+                          placeholder='ex. 11593'
+                        />
+
+                        {/*Country*/}
+                        <SignFormTemplate
+                          form={form}
+                          name='country'
+                          label='Country'
+                          placeholder='ex. United States of America'
+                        />
+
+                        {/*Birthday*/}
+                        <SignFormTemplate
+                          form={form}
+                          name='birthday'
+                          label='Date Of Birth'
+                          placeholder='MM-DD-YYYY'
+                        />
+                      </div>
+                    )}
+
                     {/*Username/Email */}
                     <SignFormTemplate
                         form={form}
-                        name={"email"}
-                        label={"Email"}
-                        placeholder={"Enter your email"}
+                        name="email"
+                        label="Email"
+                        placeholder="ex. jack.meh.hoff@hotmail.com"
                     />
                     {/*Password */}
                     <SignFormTemplate
                         form={form}
-                        name={'password'}
-                        label={'Password'}
-                        placeholder={'Enter your password'}
+                        name='password'
+                        label='Password'
+                        placeholder='Enter your password'
                         type='password'
                     />
-                    <Button type="submit">Submit</Button>
+                    <div className='flex flex-col gap-4'>
+                      <Button type="submit" className='form-btn' disabled={isLoading}>
+                        {isLoading ? 
+                        (
+                          <div className='mt-6'>
+                            <Loader2 size={20} className="animate-spin" /> &nbsp;
+                          </div>
+                        ):(
+                          type !== 'sign-in' ? 'Sign Up' : 'Sign In'
+                        )}
+                      </Button>
+                    </div>
                   </form>
+
+                  <footer className='flex justify-center gap-1 mt-3'>
+                    <p className='text-14 font-normal text-gray-600'>
+                      {type === 'sign-in' ? "Don't have an account?" : "Already have an account?"}
+                      
+                      <Link href={type === 'sign-in' ? '/sign_up' : '/sign_in'} className='form-link flex justify-center'>
+                          {type === 'sign-in' ? "Sign Up!" : "Sign In!"}
+                      </Link>
+                    </p>
+                  </footer>
+
                 </Form>
             </div>
         )}
