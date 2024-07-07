@@ -3,6 +3,7 @@ import { type ClassValue, clsx } from "clsx";
 import qs from "query-string";
 import { twMerge } from "tailwind-merge";
 import { z } from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -196,15 +197,29 @@ export const getTransactionStatus = (date: Date) => {
 };
 
 const passwordPattern = /^(?=.*[0-9])(?=.*[!@#$%^&*])/;
-const numbers = /^[0-9]$/;
+const numbers = /^[0-9]+$/;
 const alphaNumeric = /^(?=.*[a-z])|(?=.*[ABCDEFGHIJKLMNOPQRSTUVWXYZ])/;
-export const authFformSchema = (type: string) => z.object({
+export const authFormSchema = (type: string) => z.object({
   email: z.string().email( 
     {
       message: "Not a valid email"
     }
   ),
+  confirmEmail: z.string().email(
+    {
+      message: "Not a valid email"
+    }
+  ),
   password: z.string().min(10,
+    {
+      message: "Password must be longer than 10 characters"
+    }
+  ).regex(passwordPattern,
+    {
+      message: "Password must include at least 1 number & special character"
+    }
+  ),
+  confirmPass: z.string().min(10,
     {
       message: "Password must be longer than 10 characters"
     }
@@ -243,12 +258,35 @@ export const authFformSchema = (type: string) => z.object({
     }
   ),
   country: type === 'sign-in' ? z.string().optional() : z.string(),
-  /*birthday: z.date(
-    {
-      message: "Enter a valid date"
-    }
-  )*/
-  birthday: type === 'sign-in' ? z.string().optional() : z.string()
+  birthday: type === 'sign-in' ? z.string().optional() : z.string() //Later on make this a date dropdown
   
 
-})
+}).superRefine(({ password, confirmPass }, context) => {
+  if (password !== confirmPass) 
+    {
+      context.addIssue({
+        path: ['confirmPass'],
+        code: 'custom',
+        message: 'Passwords must match'
+      });
+      context.addIssue({
+        path: ['password'],
+        code: 'custom',
+        message: 'Passwords must match'
+      });
+  }
+}).superRefine(({email, confirmEmail }, context) => {
+  if (email !== confirmEmail)
+  {
+    context.addIssue({
+      path: ['confirmEmail'],
+      code: "custom",
+      message: "Emails must match"
+    });
+    context.addIssue({
+      path: ['email'],
+      code: "custom",
+      message: "Emails must match"
+    })
+  }
+});

@@ -20,11 +20,11 @@ import {Input} from "@/components/ui/input"
 import SignFormTemplate from './signform';
 import {Loader2} from 'lucide-react';
 import { authFormSchema } from '@/lib/utils';
-const formSchema = authFormSchema();
 
 const AuthForm = ({type}: {type : string}) => 
 {
   //Form Definiton
+  const formSchema = authFormSchema(type);
   const form = useForm<z.infer<typeof formSchema>>(
   {
     resolver: zodResolver(formSchema),
@@ -42,6 +42,7 @@ const AuthForm = ({type}: {type : string}) =>
   function onSubmit(values: z.infer<typeof formSchema>)
   {
       setIsLoading(true);
+      
       console.log(values)
       setIsLoading(false);
   }
@@ -93,7 +94,8 @@ const AuthForm = ({type}: {type : string}) =>
                     {type === 'sign-up' && 
                     (
                       <div className='flex flex-col gap-3'>
-                        {/*First name */}
+                        <div className='flex gap-4'>
+                          {/*First name */}
                         <SignFormTemplate
                           form={form}
                           name='firstName'
@@ -108,6 +110,7 @@ const AuthForm = ({type}: {type : string}) =>
                           label='Last Name'
                           placeholder='ex. Hoff'
                         />
+                        </div>
 
                         {/*Address */}
                         <SignFormTemplate
@@ -117,7 +120,8 @@ const AuthForm = ({type}: {type : string}) =>
                           placeholder='ex. 123 Apple Ave.'
                         />
 
-                        {/*State*/}
+                        <div className='flex gap-4'>
+                          {/*State*/}
                         <SignFormTemplate
                           form={form}
                           name='state'
@@ -132,6 +136,7 @@ const AuthForm = ({type}: {type : string}) =>
                           label='Postal Code'
                           placeholder='ex. 11593'
                         />
+                        </div>
 
                         {/*Country*/}
                         <SignFormTemplate
@@ -148,24 +153,65 @@ const AuthForm = ({type}: {type : string}) =>
                           label='Date Of Birth'
                           placeholder='MM-DD-YYYY'
                         />
-                      </div>
-                    )}
 
-                    {/*Username/Email */}
-                    <SignFormTemplate
+                        {/*Username/Email */}
+                        <SignFormTemplate
                         form={form}
                         name="email"
                         label="Email"
-                        placeholder="ex. jack.meh.hoff@hotmail.com"
-                    />
-                    {/*Password */}
-                    <SignFormTemplate
+                        placeholder="Enter your email"
+                        />
+
+                        {/*Username/Email Confirm*/}
+                        <SignFormTemplate
+                        form={form}
+                        name="confirmEmail"
+                        label="Confirm Email"
+                        placeholder=""
+                        />
+
+                        {/*Password */}
+                        <SignFormTemplate
                         form={form}
                         name='password'
                         label='Password'
                         placeholder='Enter your password'
                         type='password'
-                    />
+                        />
+
+                        {/*Password Confirm*/}
+                        <SignFormTemplate
+                        form={form}
+                        name='confirmPass'
+                        label='Confirm Password'
+                        placeholder=''
+                        type='password'
+                        />
+                      </div>
+                    )}
+
+                    {type === 'sign-in' && 
+                    (
+                      <div className='flex flex-col gap-3'>
+                        {/*Username/Email */}
+                        <SignFormTemplate
+                          form={form}
+                          name="email"
+                          label="Email"
+                          placeholder="Enter your email"
+                        />
+                        {/*Password */}
+                        <SignFormTemplate
+                          form={form}
+                          name='password'
+                          label='Password'
+                          placeholder='Enter your password'
+                          type='password'
+                        />
+                      </div>
+                    )}
+
+                    
                     <div className='flex flex-col gap-4'>
                       <Button type="submit" className='form-btn' disabled={isLoading}>
                         {isLoading ? 
