@@ -20,6 +20,8 @@ import {Input} from "@/components/ui/input"
 import SignFormTemplate from './signform';
 import {Loader2} from 'lucide-react';
 import { authFormSchema } from '@/lib/utils';
+import { signIn, signUp } from '@/lib/actions/userActions';
+import router from 'next/router';
 
 const AuthForm = ({type}: {type : string}) => 
 {
@@ -39,12 +41,39 @@ const AuthForm = ({type}: {type : string}) =>
   /*Sets initial loading state to false. If any action could cause a load, switch the bool val. */
  
   // Submission handler
-  function onSubmit(values: z.infer<typeof formSchema>)
+  const onSubmit = async (values: z.infer<typeof formSchema>) =>
   {
       setIsLoading(true);
-      
-      console.log(values)
-      setIsLoading(false);
+      try
+      {
+        if(type === 'sign-up')
+        {
+          const newUserResponse = await signUp(values);
+          setUser(newUserResponse);
+        }
+        if(type === 'sign-in')
+        {/*
+          const currUserResponse = await signIn({
+            email: values.email,
+            password: values.password
+          });
+
+          if(currUserResponse)
+          {
+            router.push('/');
+          }
+*/
+        }
+      }
+      catch(error)
+      {
+        console.log(error)
+      }
+      finally
+      {
+        console.log(values)
+        setIsLoading(false);
+      }
   }
     
   return (
