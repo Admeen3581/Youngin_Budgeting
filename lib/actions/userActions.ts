@@ -5,19 +5,17 @@ import { ID } from "node-appwrite";
 import { createAdminClient, createSessionClient } from "../server/appwrite";
 import { parseStringify } from "../utils";
 
-export const signIn = async () =>
+export const signIn = async ({email, password}: signInProps) =>
 {
     try
     {
-
+      const {account} = await createAdminClient();
+      const currUserAccount = await account.createEmailPasswordSession(email, password);
+      return parseStringify(currUserAccount);
     }
     catch(error)
     {
         console.error('Error - signIn: ', error);
-    }
-    finally
-    {
-
     }
 }
 
@@ -42,10 +40,6 @@ export const signUp = async (userData: SignUpParams) =>
     catch(error)
     {
         console.error('Error - signUp: ', error);
-    }
-    finally
-    {
-
     }
 }
 

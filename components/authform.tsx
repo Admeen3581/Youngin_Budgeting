@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {z} from "zod" /*This is a reminder that all form events must be client side */
 import {zodResolver} from "@hookform/resolvers/zod"
 import {useForm} from "react-hook-form"
@@ -16,17 +16,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import {Input} from "@/components/ui/input"
 import SignFormTemplate from './signform';
 import {Loader2} from 'lucide-react';
 import { authFormSchema } from '@/lib/utils';
 import { signIn, signUp } from '@/lib/actions/userActions';
-import router from 'next/router';
+import {useRouter} from 'next/navigation'
 
 const AuthForm = ({type}: {type : string}) => 
 {
   //Form Definiton
   const formSchema = authFormSchema(type);
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>(
   {
     resolver: zodResolver(formSchema),
@@ -52,7 +52,7 @@ const AuthForm = ({type}: {type : string}) =>
           setUser(newUserResponse);
         }
         if(type === 'sign-in')
-        {/*
+        {
           const currUserResponse = await signIn({
             email: values.email,
             password: values.password
@@ -60,12 +60,12 @@ const AuthForm = ({type}: {type : string}) =>
 
           if(currUserResponse)
           {
-            router.push('/');
+			router.push('/');
           }
-*/
+
         }
       }
-      catch(error)
+      catch(error)//you are able to catch a user already exists error to alert the screen.
       {
         console.log(error)
       }

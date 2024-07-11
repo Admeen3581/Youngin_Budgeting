@@ -205,7 +205,7 @@ export const authFormSchema = (type: string) => z.object({
       message: "Not a valid email"
     }
   ),
-  confirmEmail: z.string().email(
+  confirmEmail: type === 'sign-in' ? z.string().optional() : z.string().email(
     {
       message: "Not a valid email"
     }
@@ -219,7 +219,7 @@ export const authFormSchema = (type: string) => z.object({
       message: "Password must include at least 1 number & special character"
     }
   ),
-  confirmPass: z.string().min(10,
+  confirmPass: type === 'sign-in' ? z.string().optional() : z.string().min(10,
     {
       message: "Password must be longer than 10 characters"
     }
@@ -262,7 +262,7 @@ export const authFormSchema = (type: string) => z.object({
   
 
 }).superRefine(({ password, confirmPass }, context) => {
-  if (password !== confirmPass) 
+  if (password !== confirmPass && type === 'sign-up') 
     {
       context.addIssue({
         path: ['confirmPass'],
@@ -276,7 +276,7 @@ export const authFormSchema = (type: string) => z.object({
       });
   }
 }).superRefine(({email, confirmEmail }, context) => {
-  if (email !== confirmEmail)
+  if (email !== confirmEmail && type === 'sign-up')
   {
     context.addIssue({
       path: ['confirmEmail'],
