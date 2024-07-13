@@ -1,8 +1,9 @@
 import MobileNav from "@/components/mobilenav";
 import Sidebar from "@/components/leftsidebar";
 import Image from "next/image";
+import redirect from 'next/navigation'
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode; 
@@ -10,6 +11,8 @@ export default function RootLayout({
   {/*What is this children variable doing? */}
 
   const loggedIn = {firstName: "Admeen", lastName: "Long"};
+
+  //add a redirect here
 
   return (
     <main className="flex h-screen w-full font-inter">
