@@ -2,6 +2,8 @@
 import { type ClassValue, clsx } from "clsx";
 import qs from "query-string";
 import { twMerge } from "tailwind-merge";
+import { z } from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -193,3 +195,98 @@ export const getTransactionStatus = (date: Date) => {
 
   return date > twoDaysAgo ? "Processing" : "Success";
 };
+
+const passwordPattern = /^(?=.*[0-9])(?=.*[!@#$%^&*])/;
+const numbers = /^[0-9]+$/;
+const alphaNumeric = /^(?=.*[a-z])|(?=.*[ABCDEFGHIJKLMNOPQRSTUVWXYZ])/;
+export const authFormSchema = (type: string) => z.object({
+  email: z.string().email( 
+    {
+      message: "Not a valid email"
+    }
+  ),
+  confirmEmail: type === 'sign-in' ? z.string().optional() : z.string().email(
+    {
+      message: "Not a valid email"
+    }
+  ),
+  password: z.string().min(10,
+    {
+      message: "Password must be longer than 10 characters"
+    }
+  ).regex(passwordPattern,
+    {
+      message: "Password must include at least 1 number & special character"
+    }
+  ),
+  confirmPass: type === 'sign-in' ? z.string().optional() : z.string().min(10,
+    {
+      message: "Password must be longer than 10 characters"
+    }
+  ).regex(passwordPattern,
+    {
+      message: "Password must include at least 1 number & special character"
+    }
+  ),
+  firstName: type === 'sign-in' ? z.string().optional() : z.string().regex(alphaNumeric,
+    {
+      message: "Names can only have letters my guy"
+    }
+  ),
+  lastName: type === 'sign-in' ? z.string().optional() : z.string().regex(alphaNumeric,
+    {
+      message: "Names can only have letters my guy"
+    }
+  ),
+  address: type === 'sign-in' ? z.string().optional() : z.string(),
+  state: type === 'sign-in' ? z.string().optional() : z.string().length(2,
+    {
+      message: "Use your state's abbreviation"
+    }
+  ).regex(alphaNumeric,
+    {
+      message: "Use your state's abbreviation"
+    }
+  ),
+  code: type === 'sign-in' ? z.string().optional() : z.string().length(5,
+    {
+      message: "Enter a valid zip code"
+    }
+  ).regex(numbers, 
+    {
+      message: "Enter a valid zip code"
+    }
+  ),
+  country: type === 'sign-in' ? z.string().optional() : z.string(),
+  birthday: type === 'sign-in' ? z.string().optional() : z.string() //Later on make this a date dropdown
+  
+
+}).superRefine(({ password, confirmPass }, context) => {
+  if (password !== confirmPass && type === 'sign-up') 
+    {
+      context.addIssue({
+        path: ['confirmPass'],
+        code: 'custom',
+        message: 'Passwords must match'
+      });
+      context.addIssue({
+        path: ['password'],
+        code: 'custom',
+        message: 'Passwords must match'
+      });
+  }
+}).superRefine(({email, confirmEmail }, context) => {
+  if (email !== confirmEmail && type === 'sign-up')
+  {
+    context.addIssue({
+      path: ['confirmEmail'],
+      code: "custom",
+      message: "Emails must match"
+    });
+    context.addIssue({
+      path: ['email'],
+      code: "custom",
+      message: "Emails must match"
+    })
+  }
+});
