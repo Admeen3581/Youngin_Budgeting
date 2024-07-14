@@ -21,6 +21,7 @@ import {Loader2} from 'lucide-react';
 import { authFormSchema } from '@/lib/utils';
 import { signIn, signUp } from '@/lib/actions/userActions';
 import {useRouter} from 'next/navigation'
+import AlertPopUp from '@/components/erroralert';
 
 const AuthForm = ({type}: {type : string}) => 
 {
@@ -39,6 +40,7 @@ const AuthForm = ({type}: {type : string}) =>
   const [user, setUser] = useState(null); /*I have no idea what this does? */
   const [isLoading, setIsLoading] = useState(false); 
   /*Sets initial loading state to false. If any action could cause a load, switch the bool val. */
+  const [showAlert, setShowAlert] = useState(false);
  
   // Submission handler
   const onSubmit = async (values: z.infer<typeof formSchema>) =>
@@ -60,14 +62,14 @@ const AuthForm = ({type}: {type : string}) =>
 
           if(currUserResponse)
           {
-			router.push('/');
+			      router.push('/');
           }
 
         }
       }
       catch(error)//you are able to catch a user already exists error to alert the screen.
       {
-        console.log(error)
+        setShowAlert(true);
       }
       finally
       {
@@ -75,16 +77,21 @@ const AuthForm = ({type}: {type : string}) =>
         setIsLoading(false);
       }
   }
+
+  const handleAlertClose = () =>
+  {
+    setShowAlert(false);
+  }
     
   return (
-      <section className='auth-form'>
+    <section className='auth-form'>
         <header className='flex flex-col gap-5 md:gap-8'>
             <div>
                 <Image
-                    src="/icons/logo.svg"
-                    width={34}
-                    height={34}
-                    alt="Youngin Logo"
+                  src="/icons/logo.svg"
+                  width={34}
+                  height={34}
+                  alt="Youngin Logo"
                 />
 
                 <h1 className='text-26 font-ibm-plex-serif font-bold text-black-1'>
@@ -92,23 +99,22 @@ const AuthForm = ({type}: {type : string}) =>
                 </h1>
             </div>
 
-                <div className='flex flex-col gap-1 md:gap-3'>
-                    <h1 className='text-24 lg:text-36 font-semibold text-gray-900'>
-                        {user
-                        ? 'Link your account!'
-                        : type === 'sign-in' /*I don't quite understand this ternary logic */
-                            ? "Sign In"
-                            : "Sign Up" 
-                        }
-                    </h1>
-
-                    <p className='text-16 font-normal text-gray-600'>
-                        {user
-                        ? "Link your account to get started"
-                        : "Let's start by entering your details"
-                        }
-                    </p>
-                </div>
+            <div className='flex flex-col gap-1 md:gap-3'>
+                <h1 className='text-24 lg:text-36 font-semibold text-gray-900'>
+                    {user
+                    ? 'Link your account!'
+                    : type === 'sign-in' /*I don't quite understand this ternary logic */
+                        ? "Sign In"
+                        : "Sign Up" 
+                    }
+                </h1>
+                <p className='text-16 font-normal text-gray-600'>
+                    {user
+                    ? "Link your account to get started"
+                    : "Let's start by entering your details"
+                    }
+                </p>
+            </div>
         </header>
 
         {user ? (
@@ -239,7 +245,6 @@ const AuthForm = ({type}: {type : string}) =>
                         />
                       </div>
                     )}
-
                     
                     <div className='flex flex-col gap-4'>
                       <Button type="submit" className='form-btn' disabled={isLoading}>
@@ -253,6 +258,16 @@ const AuthForm = ({type}: {type : string}) =>
                         )}
                       </Button>
                     </div>
+
+                    {showAlert && 
+                    (
+                      <AlertPopUp
+                        title='Error'
+                        desc='Invalid email and/or password. Try again.'
+                        onClose={handleAlertClose}
+                      />
+                    )}
+
                   </form>
 
                   <footer className='flex justify-center gap-1 mt-3'>
@@ -264,14 +279,11 @@ const AuthForm = ({type}: {type : string}) =>
                       </Link>
                     </p>
                   </footer>
-
                 </Form>
             </div>
         )}
-
-
-
-    </section>
+      </section>
+    
   )
 }
 

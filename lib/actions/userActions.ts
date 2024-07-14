@@ -23,7 +23,8 @@ export const signIn = async ({email, password}: signInProps) =>
     }
     catch(error)
     {
-        console.error('Error - signIn: ', error);
+      console.error('Error - signIn: ', error);
+      throw error;
     }
 }
 
