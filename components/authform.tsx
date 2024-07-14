@@ -79,18 +79,18 @@ const AuthForm = ({type}: {type : string}) =>
   return (
       <section className='auth-form'>
         <header className='flex flex-col gap-5 md:gap-8'>
-            <Link href="/" className='cursor-pointer items-center gap-1 flex'>
-                    <Image
-                        src="/icons/logo.svg"
-                        width={34}
-                        height={34}
-                        alt="Youngin Logo"
-                    />
+            <div>
+                <Image
+                    src="/icons/logo.svg"
+                    width={34}
+                    height={34}
+                    alt="Youngin Logo"
+                />
 
-                    <h1 className='text-26 font-ibm-plex-serif font-bold text-black-1'>
-                        Youngin
-                    </h1>
-                </Link>
+                <h1 className='text-26 font-ibm-plex-serif font-bold text-black-1'>
+                    Youngin
+                </h1>
+            </div>
 
                 <div className='flex flex-col gap-1 md:gap-3'>
                     <h1 className='text-24 lg:text-36 font-semibold text-gray-900'>

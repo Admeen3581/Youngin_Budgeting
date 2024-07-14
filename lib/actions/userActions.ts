@@ -10,8 +10,16 @@ export const signIn = async ({email, password}: signInProps) =>
     try
     {
       const {account} = await createAdminClient();
-      const currUserAccount = await account.createEmailPasswordSession(email, password);
-      return parseStringify(currUserAccount);
+      const session = await account.createEmailPasswordSession(email, password);
+
+      cookies().set("youngin-session", session.secret, {
+        httpOnly: true,
+        sameSite: "strict",
+        secure: true,
+        path: '/',
+      });
+
+      return parseStringify(session);
     }
     catch(error)
     {
@@ -29,10 +37,10 @@ export const signUp = async (userData: SignUpParams) =>
         const session = await account.createEmailPasswordSession(userData.email, userData.password);
       
         cookies().set("youngin-session", session.secret, {
-          path: "/",
           httpOnly: true,
           sameSite: "strict",
           secure: true,
+          path: '/',
         });
 
         return parseStringify(newUserAccount);
