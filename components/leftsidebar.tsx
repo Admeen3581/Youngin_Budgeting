@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation'
 import React from 'react'
 import Footer from './footer'
 
-const Sidebar = ({user}: SiderbarProps) => {
+const LeftSidebar = ({user}: SiderbarProps) => {
 
     const pathName = usePathname();
 
@@ -65,4 +65,4 @@ const Sidebar = ({user}: SiderbarProps) => {
   )
 }
 
-export default Sidebar
+export default LeftSidebar
