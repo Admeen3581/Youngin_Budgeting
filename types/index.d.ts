@@ -185,6 +185,11 @@ declare interface PlaidLinkProps {
   dwollaCustomerId?: string;
 }
 
+declare interface PopUpProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
 declare interface AuthFormProps {
   type: "sign-in" | "sign-up";
 }
