@@ -68,13 +68,17 @@ export async function getLoggedInUser()
 
 export async function logOutUser()
 {
-  try
+  try 
   {
-    //Attempt user logout
-  }
-  catch(error)
+    const { account } = await createSessionClient();
+
+    cookies().delete('youngin-session');
+
+    await account.deleteSession('current');
+  } 
+  catch (error) 
   {
-    console.error("Error - logOutUser: ", error);
+    console.error('Error - logoutUser: ', error);
     return null;
   }
 }
