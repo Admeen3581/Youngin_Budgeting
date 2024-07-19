@@ -62,7 +62,7 @@ export async function getLoggedInUser()
   catch (error) 
   {
     console.error("Error - getLoggedInUser: ", error);
-    return null;
+    throw error;
   }
 }
 
