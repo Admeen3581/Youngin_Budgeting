@@ -5,7 +5,7 @@ import AccountCard from './accountcard'
 
 const RightSideBar = ({user, transactions, banks}: RightSidebarProps) => {
   return (
-    <aside className='right-sidebar'>
+    <aside className='right-sidebar -z-10'>
         <section className='flex flex-col pd-8'>
             <div className='profile-banner'/>
             <div className='profile'>

@@ -10,7 +10,7 @@ export async function createSessionClient() {
 
   const session = cookies().get("youngin-session");
   if (!session || !session.value) {
-    throw new Error("No session");
+    throw new Error("No session cookie found");
   }
 
   client.setSession(session.value);

@@ -32,6 +32,7 @@ declare type User = {
   dwollaCustomerId: string;
   firstName: string;
   lastName: string;
+  name: string;
   address: string;
   city: string;
   state: string;
@@ -109,6 +110,13 @@ declare type Receiver = {
   lastName: string;
 };
 
+declare type AlertProps = 
+{
+  title: string;
+  desc: string;
+  onClose: () => void;
+};
+
 declare type TransferParams = {
   sourceFundingSourceUrl: string;
   destinationFundingSourceUrl: string;
@@ -177,14 +185,10 @@ declare interface PlaidLinkProps {
   dwollaCustomerId?: string;
 }
 
-// declare type User = sdk.Models.Document & {
-//   accountId: string;
-//   email: string;
-//   name: string;
-//   items: string[];
-//   accessToken: string;
-//   image: string;
-// };
+declare interface PopUpProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
 
 declare interface AuthFormProps {
   type: "sign-in" | "sign-up";
@@ -209,6 +213,7 @@ declare interface TotalBalanceBoxProps {
 
 declare interface FooterProps {
   user: User;
+  type?: 'desktop' | 'mobile';
 }
 
 declare interface RightSidebarProps {
