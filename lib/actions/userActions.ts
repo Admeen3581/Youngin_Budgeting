@@ -65,3 +65,16 @@ export async function getLoggedInUser()
     return null;
   }
 }
+
+export async function logOutUser()
+{
+  try
+  {
+    //Attempt user logout
+  }
+  catch(error)
+  {
+    console.error("Error - logOutUser: ", error);
+    return null;
+  }
+}
