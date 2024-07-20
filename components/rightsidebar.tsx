@@ -4,6 +4,9 @@ import React, { use } from 'react'
 import AccountCard from './accountcard'
 
 const RightSideBar = ({user, transactions, banks}: RightSidebarProps) => {
+
+    const namesList = user.name.split(' ');
+
   return (
     <aside className='right-sidebar -z-10'>
         <section className='flex flex-col pd-8'>
@@ -11,12 +14,12 @@ const RightSideBar = ({user, transactions, banks}: RightSidebarProps) => {
             <div className='profile'>
                  <div className='profile-img'>
                     <span className='text-5xl font-bold text-blue500'>
-                        {user.firstName[0]}
+                        {namesList[0][0]}
                     </span>
                  </div>
                  <div className='profile-details'>
                     <h1 className='profile-name'>
-                        {user.firstName}{user.lastName}
+                        {user.name}
                     </h1>
                     <p className='profile-email'>
                         {user.email}
@@ -53,7 +56,7 @@ const RightSideBar = ({user, transactions, banks}: RightSidebarProps) => {
                         <AccountCard
                             key={banks[0].$id}
                             account={banks[0]}
-                            userName={`${user.firstName} ${user.lastName}`}
+                            userName={user.name}
                             showBalance={false}
                         />
                     </div>
@@ -62,7 +65,7 @@ const RightSideBar = ({user, transactions, banks}: RightSidebarProps) => {
                             <AccountCard
                             key={banks[1].$id}
                             account={banks[1]}
-                            userName={`${user.firstName} ${user.lastName}`}
+                            userName={user.name}
                             showBalance={false}
                         />
                         </div>

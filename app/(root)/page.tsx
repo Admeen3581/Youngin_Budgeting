@@ -2,10 +2,12 @@ import React from "react";
 import Headerbox from "@/components/headerbox";
 import TotalBalance from "@/components/totalbalance";
 import RightSideBar from "@/components/rightsidebar";
+import { getLoggedInUser } from "@/lib/actions/userActions";
 
-const Home = () => {
+const Home = async () => {
 
-    const loggedInUser = {firstName: "Admeen", lastName: "Long", email: "throwaway244355@gmail.com"};
+    const loggedInUser = await getLoggedInUser();
+    const namesList = loggedInUser.name.split(" ");
 
     return (
         <section className="home">
@@ -15,7 +17,7 @@ const Home = () => {
                         type="greeting"
                         title="What's good"
                         suffix="?"
-                        user={loggedInUser.firstName || "Homie"}
+                        user={namesList[0] || "Homie"}
                         subtext="Securely track your financial wonders!"
                     />
 
