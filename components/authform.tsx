@@ -22,6 +22,7 @@ import { authFormSchema } from '@/lib/utils';
 import { signIn, signUp } from '@/lib/actions/userActions';
 import {useRouter} from 'next/navigation'
 import AlertPopUp from '@/components/erroralert';
+import PlaidLink from './plaidlink';
 
 const AuthForm = ({type}: {type : string}) => 
 {
@@ -37,7 +38,7 @@ const AuthForm = ({type}: {type : string}) =>
     },
   })
 
-  const [user, setUser] = useState(null); /*I have no idea what this does? */
+  const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false); 
   /*Sets initial loading state to false. If any action could cause a load, switch the bool val. */
   const [showAlert, setShowAlert] = useState(false);
@@ -50,7 +51,19 @@ const AuthForm = ({type}: {type : string}) =>
       {
         if(type === 'sign-up')
         {
-          const newUserResponse = await signUp(values);
+          const userNames = {
+            firstName: values.firstName!,
+            lastName: values.lastName!,
+            address: values.address!,
+            city: values.city!,
+            state: values.state!,
+            code: values.code!,
+            birthday: values.birthday!,
+            email: values.email,
+            password: values.password,
+          }
+
+          const newUserResponse = await signUp(userNames);
           setUser(newUserResponse);
         }
         if(type === 'sign-in')
@@ -59,6 +72,7 @@ const AuthForm = ({type}: {type : string}) =>
             email: values.email,
             password: values.password
           });
+          setUser(currUserResponse);
 
           if(currUserResponse)
           {
@@ -103,7 +117,7 @@ const AuthForm = ({type}: {type : string}) =>
                 <h1 className='text-24 lg:text-36 font-semibold text-gray-900'>
                     {user
                     ? 'Link your account!'
-                    : type === 'sign-in' /*I don't quite understand this ternary logic */
+                    : type === 'sign-in'
                         ? "Sign In"
                         : "Sign Up" 
                     }
@@ -119,7 +133,9 @@ const AuthForm = ({type}: {type : string}) =>
 
         {user ? (
             <div className='flex flex-col gap-4'>
-                $Render a plaid link component later on$
+                <PlaidLink 
+                  user={user} variant='primary'
+                />
             </div>
         ):(
             <div>
@@ -155,6 +171,14 @@ const AuthForm = ({type}: {type : string}) =>
                           placeholder='ex. 123 Apple Ave.'
                         />
 
+                        {/*City*/}
+                        <SignFormTemplate
+                          form={form}
+                          name='city'
+                          label='City'
+                          placeholder='ex. Los Angeles'
+                        />
+
                         <div className='flex gap-4'>
                           {/*State*/}
                         <SignFormTemplate
@@ -173,20 +197,12 @@ const AuthForm = ({type}: {type : string}) =>
                         />
                         </div>
 
-                        {/*Country*/}
-                        <SignFormTemplate
-                          form={form}
-                          name='country'
-                          label='Country'
-                          placeholder='ex. United States of America'
-                        />
-
                         {/*Birthday*/}
                         <SignFormTemplate
                           form={form}
                           name='birthday'
                           label='Date Of Birth'
-                          placeholder='MM-DD-YYYY'
+                          placeholder='YYYY-MM-DD'
                         />
 
                         {/*Username/Email */}

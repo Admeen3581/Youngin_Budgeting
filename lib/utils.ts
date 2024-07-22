@@ -239,6 +239,7 @@ export const authFormSchema = (type: string) => z.object({
     }
   ),
   address: type === 'sign-in' ? z.string().optional() : z.string(),
+  city: type === 'sign-in' ? z.string().optional() : z.string(),
   state: type === 'sign-in' ? z.string().optional() : z.string().length(2,
     {
       message: "Use your state's abbreviation"
@@ -257,7 +258,6 @@ export const authFormSchema = (type: string) => z.object({
       message: "Enter a valid zip code"
     }
   ),
-  country: type === 'sign-in' ? z.string().optional() : z.string(),
   birthday: type === 'sign-in' ? z.string().optional() : z.string() //Later on make this a date dropdown
   
 
