@@ -1,7 +1,7 @@
 'use server';
 
 import { cookies } from "next/headers";
-import { ID } from 'node-appwrite';
+import { ID, Query } from 'node-appwrite';
 import { createAdminClient, createSessionClient } from "../server/appwrite";
 import { encryptId, extractCustomerIdFromUrl, parseStringify } from "../utils";
 import { CountryCode, ProcessorTokenCreateRequest, ProcessorTokenCreateRequestProcessorEnum, Products } from "plaid";
@@ -262,3 +262,43 @@ export const exchangePublicToken = async ({
     return null;
   }
 };
+
+export const getBanks = async ({userId}: getBanksProps) =>
+{
+  try
+  {
+    const {database} = await createAdminClient();
+    const banks = await database.listDocuments(
+      process.env.APPWRITE_DATABASE_ID!,
+      process.env.APPWRITE_BANK_COLLECTION_ID!,
+      [Query.equal('userId', [userId])]
+    )
+
+    return parseStringify(banks.documents);
+  }
+  catch(error)
+  {
+    console.error('Error - getBanks: ', error);
+    return null;
+  }
+}
+
+export const getBank = async ({documentId}: getBankProps) =>
+  {
+    try
+    {
+      const {database} = await createAdminClient();
+      const bank = await database.listDocuments(
+        process.env.APPWRITE_DATABASE_ID!,
+        process.env.APPWRITE_BANK_COLLECTION_ID!,
+        [Query.equal('$id', [documentId])]
+      )
+  
+      return parseStringify(bank.documents[0]);
+    }
+    catch(error)
+    {
+      console.error('Error - getBank: ', error);
+      return null;
+    }
+  }
