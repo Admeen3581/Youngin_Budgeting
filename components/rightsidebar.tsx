@@ -5,8 +5,6 @@ import AccountCard from './accountcard'
 
 const RightSideBar = ({user, transactions, banks}: RightSidebarProps) => {
 
-    const namesList = user.name.split(' ');
-
   return (
     <aside className='right-sidebar -z-10'>
         <section className='flex flex-col pd-8'>
@@ -14,12 +12,12 @@ const RightSideBar = ({user, transactions, banks}: RightSidebarProps) => {
             <div className='profile'>
                  <div className='profile-img'>
                     <span className='text-5xl font-bold text-blue500'>
-                        {namesList[0][0]}
+                        {user.firstName[0]}
                     </span>
                  </div>
                  <div className='profile-details'>
                     <h1 className='profile-name'>
-                        {user.name}
+                        {`${user.firstName} ${user.lastName}`}
                     </h1>
                     <p className='profile-email'>
                         {user.email}
@@ -56,7 +54,7 @@ const RightSideBar = ({user, transactions, banks}: RightSidebarProps) => {
                         <AccountCard
                             key={banks[0].$id}
                             account={banks[0]}
-                            userName={user.name}
+                            userName={`${user.firstName} ${user.lastName}`}
                             showBalance={false}
                         />
                     </div>
@@ -65,7 +63,7 @@ const RightSideBar = ({user, transactions, banks}: RightSidebarProps) => {
                             <AccountCard
                             key={banks[1].$id}
                             account={banks[1]}
-                            userName={user.name}
+                            userName={`${user.firstName} ${user.lastName}`}
                             showBalance={false}
                         />
                         </div>

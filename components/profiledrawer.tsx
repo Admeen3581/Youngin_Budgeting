@@ -10,7 +10,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer"
-import { logOutUser } from "@/lib/actions/userActions"
+import { logOutUser } from '@/lib/actions/user.actions'
 import { useRouter } from "next/router"
 
 export function ProfilePopUp({isOpen, onClose} : PopUpProps) 

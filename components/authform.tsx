@@ -7,19 +7,11 @@ import {z} from "zod" /*This is a reminder that all form events must be client s
 import {zodResolver} from "@hookform/resolvers/zod"
 import {useForm} from "react-hook-form"
 import {Button} from "@/components/ui/button"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
+import {Form} from "@/components/ui/form"
 import SignFormTemplate from './signform';
 import {Loader2} from 'lucide-react';
 import { authFormSchema } from '@/lib/utils';
-import { signIn, signUp } from '@/lib/actions/userActions';
+import { signIn, signUp } from '@/lib/actions/user.actions';
 import {useRouter} from 'next/navigation'
 import AlertPopUp from '@/components/erroralert';
 import PlaidLink from './plaidlink';

@@ -2,12 +2,32 @@
 
 import { cookies } from "next/headers";
 import { ID, Query } from 'node-appwrite';
-import { createAdminClient, createSessionClient } from "../server/appwrite";
+import { createAdminClient, createSessionClient } from "../appwrite";
 import { encryptId, extractCustomerIdFromUrl, parseStringify } from "../utils";
 import { CountryCode, ProcessorTokenCreateRequest, ProcessorTokenCreateRequestProcessorEnum, Products } from "plaid";
 import { plaidClient } from "../plaid";
 import { addFundingSource, createDwollaCustomer } from "./dwolla.actions";
 import { revalidatePath } from "next/cache";
+
+export const getUserInfo = async ({userId}: getUserInfoProps) =>
+{
+  try
+    {
+      const {database} = await createAdminClient();
+      const user = await database.listDocuments(
+        process.env.APPWRITE_DATABASE_ID!,
+        process.env.APPWRITE_USER_COLLECTION_ID!,
+        [Query.equal('userId', [userId])],
+      )
+  
+      return parseStringify(user.documents[0]);
+    }
+    catch(error)
+    {
+      console.error('Error - getUserInfo: ', error);
+      return null;
+    }
+}
 
 export const signIn = async ({email, password}: signInProps) =>
 {
@@ -23,7 +43,9 @@ export const signIn = async ({email, password}: signInProps) =>
         path: '/',
       });
 
-      return parseStringify(session);
+      const userInfo = await getUserInfo({userId: session.userId});
+
+      return parseStringify(userInfo);
     }
     catch(error)
     {
@@ -61,18 +83,18 @@ export const signUp = async ({password, ...userData}: SignUpParams) =>
           ssn: '0000',
         }
 
-        const dwollaCustomerURL = await createDwollaCustomer(
+        const dwollaCustomerUrl = await createDwollaCustomer(
           {
             ...userInfo,
           }
         );
 
-        if(!dwollaCustomerURL)
+        if(!dwollaCustomerUrl)
         {
           throw new Error('Error Creating Dwolla Customer');
         }
 
-        const dwollaCustomerId = extractCustomerIdFromUrl(dwollaCustomerURL);
+        const dwollaCustomerId = extractCustomerIdFromUrl(dwollaCustomerUrl);
         const newUser = await database.createDocument(
           process.env.APPWRITE_DATABASE_ID!,
           process.env.APPWRITE_USER_COLLECTION_ID!,
@@ -81,13 +103,12 @@ export const signUp = async ({password, ...userData}: SignUpParams) =>
             ...userData,
             userId: newUserAccount.$id,
             dwollaCustomerId,
-            dwollaCustomerURL
-          }
+            dwollaCustomerUrl
+          },
           );
 
 
         const session = await account.createEmailPasswordSession(userData.email, password);
-
       
         cookies().set("youngin-session", session.secret, {
           httpOnly: true,
@@ -109,7 +130,8 @@ export async function getLoggedInUser()
   try 
   {
     const { account } = await createSessionClient();
-    return await account.get();
+    const user = await getUserInfo({userId: (await account.get()).$id})
+    return parseStringify(user)
   } 
   catch (error) 
   {
@@ -157,7 +179,7 @@ export const createLinkToken = async (user: User) =>
   }
   catch(error)
   {
-    console.log('Error - createLinkToken: ', error);
+    console.error('Error - createLinkToken: ', error);
     return null;
   }
 }
@@ -186,7 +208,7 @@ export const createBankAccount = async ({
         accessToken,
         fundingSourceUrl,
         sharableId,
-      }
+      },
     )
     return parseStringify(bankAccount);
   }
@@ -271,8 +293,10 @@ export const getBanks = async ({userId}: getBanksProps) =>
     const banks = await database.listDocuments(
       process.env.APPWRITE_DATABASE_ID!,
       process.env.APPWRITE_BANK_COLLECTION_ID!,
-      [Query.equal('userId', [userId])]
+      [Query.equal('userId', [userId])]//<-- Its trying to access the bank collection but there isn't anything there.
+      //Nothing is being written to the bank collection? Why?
     )
+    console.log(banks);
 
     return parseStringify(banks.documents);
   }
@@ -289,11 +313,13 @@ export const getBank = async ({documentId}: getBankProps) =>
     {
       const {database} = await createAdminClient();
       const bank = await database.listDocuments(
-        process.env.APPWRITE_DATABASE_ID!,
-        process.env.APPWRITE_BANK_COLLECTION_ID!,
-        [Query.equal('$id', [documentId])]
-      )
-  
+      process.env.APPWRITE_DATABASE_ID!,
+      process.env.APPWRITE_BANK_COLLECTION_ID!,
+      [Query.equal('$id', [documentId])]
+      );
+
+      console.log(bank);
+
       return parseStringify(bank.documents[0]);
     }
     catch(error)

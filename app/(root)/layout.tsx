@@ -2,7 +2,7 @@ import MobileNav from "@/components/mobilenav";
 import LeftSidebar from "@/components/leftsidebar";
 import Image from "next/image";
 import {redirect} from 'next/navigation'
-import { getLoggedInUser } from "@/lib/actions/userActions";
+import { getLoggedInUser } from "@/lib/actions/user.actions";
 
 export default async function RootLayout({
   children,
