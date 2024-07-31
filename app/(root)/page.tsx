@@ -1,3 +1,6 @@
+//Appwrite, Dwolla, & Plaid
+
+
 import React from "react";
 import Headerbox from "@/components/headerbox";
 import TotalBalance from "@/components/totalbalance";
