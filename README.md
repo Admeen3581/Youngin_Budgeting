@@ -48,7 +48,7 @@
 
 ###
 
-<h6 align="center">Using TypeScript, ReactJS, NextJS, Node.JS, TailwindCSS, & Shadcn for Front-End Development.<br>Using MongoDB for databases.<br>Using Plaid & Dwolla for banking verification.<br>Using Sentry for user testing & quality control.</h6>
+<h6 align="center">Using TypeScript, ReactJS, NextJS, Node.JS, TailwindCSS, & Shadcn for Front-End Development.<br>Using MongoDB for databases.<br>Using Plaid & Dwolla for banking verification.<br>Using Selenium for user testing & quality control.</h6>
 
 ###
 
