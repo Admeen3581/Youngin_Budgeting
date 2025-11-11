@@ -33,7 +33,7 @@
   <img width="15" />
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-plain-wordmark.svg" width="40" alt="nodejs logo"  />
   <img width="15" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/appwrite/appwrite-original.svg" width="40" alt="appwrite logo"  />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/appwrite/mongodb-original.svg" width="40" alt="mongodb logo"  />
   <img width="15" />
   <img src="https://skillicons.dev/icons?i=tailwind" height="40" alt="tailwindcss logo"  />
   <img width="15" />
@@ -81,14 +81,6 @@ bun dev
 ###
 
 <p align="left">I wanted to learn a vast range of applicable skills instead of creating terminal games and solving LeetCode problems. This application inspired by JSM (JavaScript Mastery) and seemed right up my alley. I have dipped my toes into web development before, but React was the first new library I had to learn. Basically an entirely new skill from scratch. Soon followed other front-end libraries/languages such as Typescript and Shadcn. Then came the back-end which honestly was not too bad. Granted I used Appwrite instead of SQL or other popular databases. The banking authentication was definitely the most difficult part. Huge hurdles to hop over like the userId not being able to be read. Overall I enjoyed this project and to taught me lots. Full list bulleted below:<br>🔹 Using a front-end framework (React w/ NextJS)<br>🔹 Installing dependences (Node.Js)<br>🔹 Proper git etiquette <br>🔹 Using keys to interact with other applications<br>🔹 Developing using Third-Party sandbox environments to authenticate banking information privately & securely.<br>🔹 Testing code with Sentry for realtime debugging and error catching<br>🔹 Creating users with unique properties, then using said properties to re-authenticate them back into the site.</p>
-
-###
-
-<h3 align="left"><br>🔑 Credits</h3>
-
-###
-
-<p align="left">JavaScript Mastery:<br><br>He gave me the inspirational piece for this project. While both may look similar, the code for them both does have quite a few differences. I added my own elements, removed things I did not find necessary, and did not directly follow the tutorial word-for-word. I would code and then if I got stuck see what JSM did.<br><br>https://www.youtube.com/channel/UCmXmlB4-HJytD7wek0Uo97A<br>https://github.com/adrianhajdin/banking</p>
 
 ###
 
